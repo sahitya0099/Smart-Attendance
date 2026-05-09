@@ -26,7 +26,7 @@ def takeImages():
     if(is_number(Id) and name.isalpha()):
         cam = cv2.VideoCapture(0)
         harcascadePath = "haarcascade_default.xml"
-        detector = cv2.cascadeClassifier(harcascadePath)
+        detector = cv2.CascadeClassifier(harcascadePath)
         sampleNum = 0
 
         while(True):
