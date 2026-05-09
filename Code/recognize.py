@@ -31,9 +31,10 @@ def recognize_attendence():
             cv2.rectangle(im, (x, y), (x+w, y+h), (10, 159, 255), 2)
             Id, conf = recognizer.predict(gray[y:y+h, x:x+w])
             if conf < 100:
-                aa = df.loc[df['Id'] == Id]['Name'].values
+                name_series = df.loc[df['Id'] == Id]['Name'].values
+                aa = name_series[0] if len(name_series) > 0 else "Unknown"
                 confstr = "  {0}%".format(round(100 - conf))
-                tt = str(Id)+"-"+aa
+                tt = str(Id) + "-" + str(aa)
             else:
                 Id = '  Unknown  '
                 tt = str(Id)
@@ -43,10 +44,8 @@ def recognize_attendence():
                 ts = time.time()
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
-                aa = str(aa)[2:-2]
-                attendance.loc[len(attendance)] = [Id, aa, date, timeStamp]
+                attendance.loc[len(attendance)] = [Id, str(aa), date, timeStamp]
 
-            tt = str(tt)[2:-2]
             if(100-conf) > 67:
                 tt = tt + " [Pass]"
                 cv2.putText(im, str(tt), (x+5,y-5), font, 1, (255, 255, 255), 2)
